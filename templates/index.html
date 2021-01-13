@@ -5,18 +5,14 @@
 {% endblock %}
 {% block body %}
 <div class="content">
-    <h1>CircuitSimulatorApp</h1>
-    {% if PartHTML.number_of_parts < 1 %}
-    <h3>The netlist is currently empty.</h3>
-    <br>
-    {% endif %}
+
 
     <form action="/" method="POST">
         <select name="ptype" id="ptype">
-            <option value="V">V</option>
-            <option value="R">R</option>
-            <option value="C">C</option>
-            <option value="L">L</option>
+            <option value="V">Voltage Source (V)</option>
+            <option value="R">Resistor (R)</option>
+            <option value="C">Capacitor (C)</option>
+            <option value="L">Inductor (L)</option>
         </select>
         <input type="text" name="pident" id="pident" placeholder="Identifier">
         <input type="text" name="pvalue" id="pvalue" placeholder="Value">
@@ -26,14 +22,21 @@
     </form>
 
     
-
-    {% if PartHTML.number_of_parts > 0 %} <!-- Only show the table headings if there are nets in the netlist -->
-    <h4>Number of nets: {{ PartHTML.number_of_parts }} </h4>
+    {% if PartHTML.number_of_parts < 1 %}
+    <h4 style="color:red">The netlist is currently empty.</h4>
+    <br>
+    {% else %}
+        {% if PartHTML.number_of_parts == 1 %}
+            <h4>{{ PartHTML.number_of_parts }} Net Entered</h4>
+        {% else %}
+            <h4>{{ PartHTML.number_of_parts }} Nets Entered</h4>
+        {% endif %}
     <table>
         <thead>
             <tr>
                 <th>Component</th>
                 <th>Value</th>
+                <th>Units</th>
                 <th>Node 1</th>
                 <th>Node 2</th>
                 <th>Action</th>
@@ -41,7 +44,8 @@
             {% for Part in part_arrayHTML %} <!-- Make a new row for each part in the netlist -->
             <tr>
                 <td>{{Part.partName}}</td>
-                <td>{{Part.partValue}} {{Part.returnUnits()}}</td>
+                <td>{{Part.partValue}}</td>
+                <td>{{Part.getUnits()}}</td>
                 <td>{{Part.node1}}</td>
                 <td>{{Part.node2}}</td>
                 <td><a href="">Update</a>
@@ -52,6 +56,22 @@
         </thead>
         {% endfor %}
     </table>
+
+    
+    <br><hr width=75%><br>
+    <form action="/run" method="POST">
+        <select name="simtype" id="simtype">
+            <option value="1">Voltage Analysis</option>
+            <option value="2">Time Analysis</option>
+            <option value="3">Frequency Analysis</option>
+        </select>
+        <input type="text" name="simnode" id="simnode" placeholder="Node" {% if simHTML.getNode() != "0" %} value="{{simHTML.getNode()}}" {% endif %}>
+        <input type="text" name="simstartfreq" id="simstartfreq" placeholder="Start Frequency [Hz]" {% if simHTML.getStart() != 0 %} value="{{simHTML.getStart()}}" {% endif %}>
+        <input type="text" name="simendfreq" id="simendfreq" placeholder="End Frequency [Hz]" {% if simHTML.getEnd() != 0 %} value="{{simHTML.getEnd()}}" {% endif %}>
+        <input type="submit" value="Run Simulation">
+    </form>
+
+
     {% endif %}
     
 </div>

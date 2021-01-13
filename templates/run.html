@@ -5,5 +5,32 @@
 {% endblock %}
 {% block body %}
 
+<h3 style="text-align:center"><a href="/">BACK TO SIMULATION SETUP</a></h3>
+<br>
+
+<table style="width:20%">
+    <thead>
+        <th>Simulation Parameter</th>
+        <th>Value</th>
+    </thead>
+    <tr>
+        <td>Type</td>
+        <td>{{simHTML.getType()}}</td>
+    </tr>
+    <tr>
+        <td>Node</td>
+        <td>{{simHTML.getNode()}}</td>
+    </tr>
+    <tr>
+        <td>Start Frequency</td>
+        <td>{{simHTML.getStart()}}</td>
+    </tr>
+    <tr>
+        <td>End Frequency</td>
+        <td>{{simHTML.getEnd()}}</td>
+    </tr>
+</table>
+
+
 
 {% endblock %}

@@ -24,22 +24,22 @@ class Part:
         Part.number_of_parts += 1
         Part.part_names_list.append(self.partName)
 
-    def returnType(self):
+    def getType(self):
         return self.partType
 
-    def returnId(self):
+    def getId(self):
         return self.partId
     
-    def returnValue(self):
+    def getValue(self):
         return self.partValue
 
-    def returnNode1(self):
+    def getNode1(self):
         return self.node1
 
-    def returnNode2(self):
+    def getNode2(self):
         return self.node2
 
-    def returnUnits(self):
+    def getUnits(self):
         if self.partType == "V":
             return "Volts"
         elif self.partType == "R":
@@ -54,25 +54,63 @@ class Part:
         return True
 
 
+class Simulation:
+    def __init__(self, simtype, simnode, simstartfreq, simendfreq):
+        self.simtype = simtype
+        self.simnode = simnode
+        self.simstartfreq = simstartfreq
+        self.simendfreq = simendfreq
+
+    def getType(self):
+        if self.simtype == "1":
+            return "Voltage Reading"
+        elif self.simtype == "2":
+            return "Time Domain Analysis"
+        elif self.simtype == "3":
+            return "Frequency Domain Analysis"
+        else:
+            return "Something went wrong!"
+
+    def getNode(self):
+        return str(self.simnode)
+    
+    def getStart(self):
+        return str(self.simstartfreq)
+    
+    def getEnd(self):
+        return str(self.simendfreq)
+
+
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-        if request.method == 'POST':    # If new part added, read in the parameters and create the new Part object
-            form_type = request.form['ptype']
-            form_ident = request.form['pident']
-            form_value = request.form['pvalue']
-            form_node1 = request.form['pnode1']
-            form_node2 = request.form['pnode2']
-            part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
+    if request.method == 'POST':    # If new part added, read in the parameters and create the new Part object
+        form_type = request.form['ptype']
+        form_ident = request.form['pident']
+        form_value = request.form['pvalue']
+        form_node1 = request.form['pnode1']
+        form_node2 = request.form['pnode2']
+        part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
 
 
-        #part_array.append(Part("R",32,4700,1,0))
-        print(Part.number_of_parts) # Prints the number of parts to the console (not to the HTML page)
-        
-        #numParts = Part.number_of_parts # 
-        return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array)    # NEED TO INCLUDE VARS HERE (I think)
+    # # # REMOVE THIS LATER # # #
+    print(Part.number_of_parts) # Prints the number of parts to the console (not to the HTML page)
+    # # # # # # # # # # # # # # #
+
+    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim)    # NEED TO INCLUDE VARS HERE (I think)
 
 
+
+
+@app.route('/run', methods=['POST', 'GET'])
+def run():
+    if request.method == 'POST':
+        sim.simtype = request.form['simtype']
+        sim.simnode = request.form['simnode']
+        sim.simstartfreq = request.form['simstartfreq']
+        sim.simendfreq = request.form['simendfreq']
+    return render_template('run.html', simHTML = sim)
 
 
 
@@ -80,4 +118,5 @@ def index():
 
 if __name__ == "__main__":
     part_array = []         # Establish the list holding the parts
+    sim = Simulation("0",0,0,0)
     app.run(debug=True)
