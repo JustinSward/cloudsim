@@ -39,6 +39,20 @@ class Part:
     def returnNode2(self):
         return self.node2
 
+    def returnUnits(self):
+        if self.partType == "V":
+            return "Volts"
+        elif self.partType == "R":
+            return "Ohms"
+        elif self.partType == "C":
+            return "Farads"
+        elif self.partType == "L":
+            return "Henry"
+
+    def deletePart(self):   # NEEDS TO BE COMPLETED!! (find index of part, remove part from parts_name_list, etc)
+        Part.number_of_parts -= 1
+        return True
+
 
 
 @app.route('/', methods=['POST', 'GET'])

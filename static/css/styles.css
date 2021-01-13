@@ -1,0 +1,56 @@
+
+h1 {
+	margin: 0.5em;
+	padding: 0.5em;
+	color: black;
+	text-align: center;
+	font-size: 2em;
+}
+
+h3 {
+	color: red;
+}
+
+h4 {
+	color: darkblue;
+}
+
+
+body {
+	background-color: lightgrey;
+	margin: auto;
+}
+
+.content {
+	width: 75%;
+	margin: auto;
+}
+
+table {
+	border-collapse: collapse;
+	width: 50%;
+	text-align: center;
+}
+
+td, th {
+	border: 1px solid grey;
+}
+
+a{
+	font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+a:link {
+	color: red;
+}
+a:visited {
+	color: red;
+}
+
+th {
+	font-weight: bold;
+}
+
+tr {
+	font-weight: normal;
+}

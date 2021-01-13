@@ -5,9 +5,10 @@
 {% endblock %}
 {% block body %}
 <div class="content">
-    <h1>Netlist {{ PartHTML.number_of_parts }}</h1>
+    <h1>CircuitSimulatorApp</h1>
     {% if PartHTML.number_of_parts < 1 %}
-    <h4>There are current no components.</h4>
+    <h3>The netlist is currently empty.</h3>
+    <br>
     {% endif %}
 
     <form action="/" method="POST">
@@ -24,30 +25,31 @@
         <input type="submit" value="Add Component">
     </form>
 
-    <br><br>
+    
 
     {% if PartHTML.number_of_parts > 0 %} <!-- Only show the table headings if there are nets in the netlist -->
+    <h4>Number of nets: {{ PartHTML.number_of_parts }} </h4>
     <table>
-        <tr>
-            <th>Component</th>
-            <th>Instance</th>
-            <th>Value</th>
-            <th>Node 1</th>
-            <th>Node 2</th>
-            <th>Actions</th>
-        </tr>
-        {% for Part in part_arrayHTML %} <!-- Make a new row for each part in the netlist -->
-        <tr>
-            <th>{{Part.partType}}</th>
-            <th>{{Part.partId}}</th>
-            <th>{{Part.partValue}}</th>
-            <th>{{Part.node1}}</th>
-            <th>{{Part.node2}}</th>
-            <th><a href="">Update</a>
-                <br>
-                <a href="">Delete</a>
-            </th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Value</th>
+                <th>Node 1</th>
+                <th>Node 2</th>
+                <th>Action</th>
+            </tr>
+            {% for Part in part_arrayHTML %} <!-- Make a new row for each part in the netlist -->
+            <tr>
+                <td>{{Part.partName}}</td>
+                <td>{{Part.partValue}} {{Part.returnUnits()}}</td>
+                <td>{{Part.node1}}</td>
+                <td>{{Part.node2}}</td>
+                <td><a href="">Update</a>
+                    <br>
+                    <a href="">Delete</a>
+                </td>
+            </tr>
+        </thead>
         {% endfor %}
     </table>
     {% endif %}
