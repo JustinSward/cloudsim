@@ -43,20 +43,20 @@ class Part:
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-        if request.method == 'POST':
+        if request.method == 'POST':    # If new part added, read in the parameters and create the new Part object
             form_type = request.form['ptype']
             form_ident = request.form['pident']
             form_value = request.form['pvalue']
             form_node1 = request.form['pnode1']
             form_node2 = request.form['pnode2']
-            part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))
+            part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
 
 
         #part_array.append(Part("R",32,4700,1,0))
-        print(Part.number_of_parts)
+        print(Part.number_of_parts) # Prints the number of parts to the console (not to the HTML page)
         
-        numParts = Part.number_of_parts
-        return render_template('index.html', numPartsHTML=numParts, PartHTML = Part, part_arrayHTML = part_array)    # NEED TO INCLUDE VARS HERE (I think)
+        #numParts = Part.number_of_parts # 
+        return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array)    # NEED TO INCLUDE VARS HERE (I think)
 
 
 

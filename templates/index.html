@@ -6,7 +6,7 @@
 {% block body %}
 <div class="content">
     <h1>Netlist {{ PartHTML.number_of_parts }}</h1>
-    {% if numPartsHTML < 1 %}
+    {% if PartHTML.number_of_parts < 1 %}
     <h4>There are current no components.</h4>
     {% endif %}
 
@@ -26,27 +26,29 @@
 
     <br><br>
 
-    {% if numPartsHTML > 0 %}
+    {% if PartHTML.number_of_parts > 0 %} <!-- Only show the table headings if there are nets in the netlist -->
     <table>
         <tr>
-            <th>Type</th>
             <th>Component</th>
+            <th>Instance</th>
             <th>Value</th>
             <th>Node 1</th>
             <th>Node 2</th>
             <th>Actions</th>
         </tr>
+        {% for Part in part_arrayHTML %} <!-- Make a new row for each part in the netlist -->
         <tr>
-            <th>{{part_arrayHTML[0].partType}}</th>
-            <th>{{part_arrayHTML[0].partId}}</th>
-            <th>{{part_arrayHTML[0].partValue}}</th>
-            <th>{{part_arrayHTML[0].node1}}</th>
-            <th>{{part_arrayHTML[0].node2}}</th>
+            <th>{{Part.partType}}</th>
+            <th>{{Part.partId}}</th>
+            <th>{{Part.partValue}}</th>
+            <th>{{Part.node1}}</th>
+            <th>{{Part.node2}}</th>
             <th><a href="">Update</a>
                 <br>
                 <a href="">Delete</a>
             </th>
         </tr>
+        {% endfor %}
     </table>
     {% endif %}
     
