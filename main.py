@@ -85,20 +85,23 @@ class Simulation:
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
+    partAdded = False
     if request.method == 'POST':    # If new part added, read in the parameters and create the new Part object
         form_type = request.form['ptype']
         form_ident = request.form['pident']
         form_value = request.form['pvalue']
         form_node1 = request.form['pnode1']
         form_node2 = request.form['pnode2']
+        # NEED TO CHECK IF PART NAME IS USED ALREADY --> IF NOT, DO NOT ADD!!
         part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
-
+        partAdded = True
 
     # # # REMOVE THIS LATER # # #
     print(Part.number_of_parts) # Prints the number of parts to the console (not to the HTML page)
+    print(partAdded)
     # # # # # # # # # # # # # # #
 
-    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim)    # NEED TO INCLUDE VARS HERE (I think)
+    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim, partAddedH = partAdded)    # NEED TO INCLUDE VARS HERE (I think)
 
 
 
@@ -111,6 +114,23 @@ def run():
         sim.simstartfreq = request.form['simstartfreq']
         sim.simendfreq = request.form['simendfreq']
     return render_template('run.html', simHTML = sim)
+
+
+
+@app.route('/clear')
+def clearList():
+    part_array.clear()
+    Part.number_of_parts = 0
+    Part.part_names_list.clear()
+    return redirect('/')
+
+
+@app.route('/undo')
+def undoAdd():
+    Part.part_names_list.pop()
+    part_array.pop()
+    Part.number_of_parts -= 1
+    return redirect('/')
 
 
 

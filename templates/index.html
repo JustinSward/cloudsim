@@ -5,7 +5,7 @@
 {% endblock %}
 {% block body %}
 <div class="topnav">
-    <a class="active" href="/">Home</a>
+    <a class="active" href="/">Simulator</a>
     <a href="/instructions">Instructions</a>
     <a href="/about">About Us</a>
   </div>
@@ -27,16 +27,28 @@
         <input type="submit" value="Add Component">
     </form>
 
-    
+    {% if partAddedH %}
+    <h3>Component successfully added</h3>
+    ( <a href='/undo'> UNDO ADD</a> )
+    {% else %}
+    <br><br>
+    {% endif %}
+
+
     {% if PartHTML.number_of_parts < 1 %}
-    <h4 style="color:red">The netlist is currently empty.</h4>
+    <p style="color:darkred" style="margin:0.5em">The netlist is currently empty.</p>
     <br>
     {% else %}
+    <p style="color:darkblue" style="padding:1em">
         {% if PartHTML.number_of_parts == 1 %}
-            <h4>{{ PartHTML.number_of_parts }} Net Entered</h4>
+        Total: {{ PartHTML.number_of_parts }} Net
         {% else %}
-            <h4>{{ PartHTML.number_of_parts }} Nets Entered</h4>
-        {% endif %}
+            Total: {{ PartHTML.number_of_parts }} Nets
+    {% endif %}
+    </p>
+    ( <a href='/clear'>CLEAR NETLIST</a> )
+    
+
     <table>
         <thead>
             <tr>
