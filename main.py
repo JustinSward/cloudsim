@@ -114,6 +114,15 @@ def run():
 
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+@app.route('/instructions')
+def instructions():
+    return render_template('instructions.html')
+
 
 
 if __name__ == "__main__":

@@ -4,9 +4,15 @@
 
 {% endblock %}
 {% block body %}
+<div class="topnav">
+    <a class="active" href="/">Home</a>
+    <a href="/instructions">Instructions</a>
+    <a href="/about">About Us</a>
+  </div>
+
+<h2>Simulation Setup</h2>
+
 <div class="content">
-
-
     <form action="/" method="POST">
         <select name="ptype" id="ptype">
             <option value="V">Voltage Source (V)</option>
@@ -65,9 +71,9 @@
             <option value="2">Time Analysis</option>
             <option value="3">Frequency Analysis</option>
         </select>
-        <input type="text" name="simnode" id="simnode" placeholder="Node" {% if simHTML.getNode() != "0" %} value="{{simHTML.getNode()}}" {% endif %}>
-        <input type="text" name="simstartfreq" id="simstartfreq" placeholder="Start Frequency [Hz]" {% if simHTML.getStart() != 0 %} value="{{simHTML.getStart()}}" {% endif %}>
-        <input type="text" name="simendfreq" id="simendfreq" placeholder="End Frequency [Hz]" {% if simHTML.getEnd() != 0 %} value="{{simHTML.getEnd()}}" {% endif %}>
+        <input type="text" name="simnode" id="simnode" placeholder="Node">
+        <input type="text" name="simstartfreq" id="simstartfreq" placeholder="Start Frequency [Hz]">
+        <input type="text" name="simendfreq" id="simendfreq" placeholder="End Frequency [Hz]">
         <input type="submit" value="Run Simulation">
     </form>
 
