@@ -43,7 +43,20 @@ class Part:
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-        return render_template('index.html')
+        if request.method == 'POST':
+            form_type = request.form['ptype']
+            form_ident = request.form['pident']
+            form_value = request.form['pvalue']
+            form_node1 = request.form['pnode1']
+            form_node2 = request.form['pnode2']
+            part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))
+
+
+        #part_array.append(Part("R",32,4700,1,0))
+        print(Part.number_of_parts)
+        
+        numParts = Part.number_of_parts
+        return render_template('index.html', numPartsHTML=numParts, PartHTML = Part, part_arrayHTML = part_array)    # NEED TO INCLUDE VARS HERE (I think)
 
 
 
@@ -52,4 +65,5 @@ def index():
 
 
 if __name__ == "__main__":
+    part_array = []         # Establish the list holding the parts
     app.run(debug=True)

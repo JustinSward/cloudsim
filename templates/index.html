@@ -5,8 +5,10 @@
 {% endblock %}
 {% block body %}
 <div class="content">
-    <h1>Netlist</h1>
+    <h1>Netlist {{ PartHTML.number_of_parts }}</h1>
+    {% if numPartsHTML < 1 %}
     <h4>There are current no components.</h4>
+    {% endif %}
 
     <form action="/" method="POST">
         <select name="ptype" id="ptype">
@@ -24,7 +26,7 @@
 
     <br><br>
 
-
+    {% if numPartsHTML > 0 %}
     <table>
         <tr>
             <th>Type</th>
@@ -35,18 +37,18 @@
             <th>Actions</th>
         </tr>
         <tr>
-            <th>R</th>
-            <th>32</th>
-            <th>4700</th>
-            <th>1</th>
-            <th>0</th>
+            <th>{{part_arrayHTML[0].partType}}</th>
+            <th>{{part_arrayHTML[0].partId}}</th>
+            <th>{{part_arrayHTML[0].partValue}}</th>
+            <th>{{part_arrayHTML[0].node1}}</th>
+            <th>{{part_arrayHTML[0].node2}}</th>
             <th><a href="">Update</a>
                 <br>
                 <a href="">Delete</a>
             </th>
         </tr>
     </table>
-
+    {% endif %}
     
 </div>
 {% endblock %}
