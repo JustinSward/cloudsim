@@ -17,7 +17,6 @@ class Part:
     def __init__(self, partType, partId,partValue, node1, node2):
         self.partType = partType
         self.partId = partId    #TYPE CAST TO int() if needed!
-        self.partName = str(partType) + str(partId)
         self.partValue = partValue
         self.node1 = node1
         self.node2 = node2
@@ -133,7 +132,7 @@ def clearList():
 @app.route('/delete/<qwerty>')
 def deletePart(qwerty):
     for part in part_array:
-        if part.partName == qwerty:
+        if part.getPartName() == qwerty:
             index = part_array.index(part)
             print("Index is: " + str(index))
             part_array.pop(index)
