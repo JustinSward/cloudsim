@@ -20,10 +20,10 @@
             <option value="C">Capacitor (C)</option>
             <option value="L">Inductor (L)</option>
         </select>
-        <input type="text" name="pident" id="pident" placeholder="Identifier">
-        <input type="number" name="pvalue" id="pvalue" placeholder="Value" min="0" step="any">
-        <input type="number" name="pnode1" id="pnode1" placeholder="Node 1" min="0" step="1">
-        <input type="number" name="pnode2" id="pnode2" placeholder="Node 2" min="0" step="1">
+        <input type="text" name="pident" id="pident" placeholder="Identifier" required>
+        <input type="number" name="pvalue" id="pvalue" placeholder="Value" min="0" step="any" required>
+        <input type="number" name="pnode1" id="pnode1" placeholder="Node 1" min="0" step="1" required>
+        <input type="number" name="pnode2" id="pnode2" placeholder="Node 2" min="0" step="1" required>
         <input type="submit" value="Add Component">
     </form>
 
@@ -83,7 +83,7 @@
             <option value="2">Time Analysis</option>
             <option value="3">Frequency Analysis</option>
         </select>
-        <input type="number" name="simnode" id="simnode" placeholder="Node">
+        <input type="number" name="simnode" id="simnode" placeholder="Node" min="0" step="1" required>
         <input type="text" name="simstartfreq" id="simstartfreq" placeholder="Start Frequency [Hz]">
         <input type="text" name="simendfreq" id="simendfreq" placeholder="End Frequency [Hz]">
         <input type="submit" value="Run Simulation">
