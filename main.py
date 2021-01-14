@@ -17,6 +17,7 @@ class Part:
     def __init__(self, partType, partId,partValue, node1, node2):
         self.partType = partType
         self.partId = partId    #TYPE CAST TO int() if needed!
+        self.partName = str(partType) + str(partId)
         self.partValue = partValue
         self.node1 = node1
         self.node2 = node2
@@ -87,27 +88,26 @@ class Simulation:
 @app.route('/', methods=['POST', 'GET'])
 def index():
     partAdded = False
+    partFailed = False
     if request.method == 'POST':    # If new part added, read in the parameters and create the new Part object
         form_type = request.form['ptype']
         form_ident = request.form['pident']
         form_value = request.form['pvalue']
         form_node1 = request.form['pnode1']
         form_node2 = request.form['pnode2']
-        # NEED TO CHECK IF PART NAME IS USED ALREADY --> IF NOT, DO NOT ADD!!
-        part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
-        part_array.sort(key=attrgetter('partType','partId'))    # Keep the parts list sorted
-        partAdded = True    # Part successfully added to the net list
+        form_name = str(form_type) + str(form_ident)
+        # NEED TO CHECK IF PART NAME IS USED ALREADY --> IF IT IS, DO NOT ADD
+        if any(part.getPartName() == form_name for part in part_array):
+            partAdded = False   # Part was NOT added to the net list
+            partFailed = True   # Part did failed being added to the net list
+        else:
+            part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
+            part_array.sort(key=attrgetter('partType','partId'))    # Keep the parts list sorted every time one is added
+            partAdded = True    # Part successfully added to the net list
+            partFailed = False  # Part did not fail being added to the net list
 
-    # # # REMOVE THIS LATER # # #
-    print(Part.number_of_parts) # Prints the number of parts to the console (not to the HTML page)
-    print(partAdded)
 
-    for part in part_array:
-        print(part.getPartName())
-    
-    # # # # # # # # # # # # # # #
-
-    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim, partAddedH = partAdded)
+    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim, partAddedH = partAdded, partFailedH = partFailed)
 
 
 
@@ -127,13 +127,23 @@ def run():
 def clearList():
     part_array.clear()
     Part.number_of_parts = 0
-    Part.part_names_list.clear()
     return redirect('/')
+
+
+@app.route('/delete/<qwerty>')
+def deletePart(qwerty):
+    for part in part_array:
+        if part.partName == qwerty:
+            index = part_array.index(part)
+            print("Index is: " + str(index))
+            part_array.pop(index)
+            break
+    return redirect('/')
+
 
 
 @app.route('/undo') # BROKEN CURRENTLY -- REMOVES THE WRONG COMPONENT !!!!!!!!!!!!!!!!!!!
 def undoAdd():
-    Part.part_names_list.pop()
     part_array.pop()
     Part.number_of_parts -= 1
     return redirect('/')
@@ -153,6 +163,5 @@ def instructions():
 
 if __name__ == "__main__":
     part_array = []             # Establish the list holding the parts
-    part_names_list = []        # Keeps track of all the part names
     sim = Simulation("0",0,0,0) # Keeps track of the simulation settings
     app.run(debug=True)

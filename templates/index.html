@@ -28,8 +28,10 @@
     </form>
 
     {% if partAddedH %}
-    <h3>Component successfully added</h3>
-    ( <a href='/undo'> UNDO ADD</a> )
+    <h3>Component successfully added</h3><br>
+    <!-- doesn't work yet... ( <a href='/undo'> UNDO ADD</a> ) -->
+    {% elif partFailedH %}
+    <h3 style="color:red">Component identifier already in netlist!</h3><br>
     {% else %}
     <br><br>
     {% endif %}
@@ -68,7 +70,7 @@
                 <td>{{Part.node2}}</td>
                 <td><a href="">Update</a>
                     <br>
-                    <a href="">Delete</a>
+                    <a href="/delete/{{Part.getPartName()}}">Delete</a>
                 </td>
             </tr>
         </thead>
