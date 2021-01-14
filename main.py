@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 from datetime import datetime
+from operator import itemgetter, attrgetter
 
 app = Flask(__name__)
 
@@ -12,17 +13,14 @@ app = Flask(__name__)
 # @param node2 The numerical value of the negative or second node the part is connected
 class Part:
     number_of_parts = 0 # Keeps track of the number of parts
-    part_names_list = [] # Keeps track of all the part names
 
     def __init__(self, partType, partId,partValue, node1, node2):
         self.partType = partType
-        self.partId = partId
-        self.partName = str(self.partType) + str(self.partId)
+        self.partId = partId    #TYPE CAST TO int() if needed!
         self.partValue = partValue
         self.node1 = node1
         self.node2 = node2
         Part.number_of_parts += 1
-        Part.part_names_list.append(self.partName)
 
     def getType(self):
         return self.partType
@@ -48,6 +46,9 @@ class Part:
             return "Farads"
         elif self.partType == "L":
             return "Henry"
+    
+    def getPartName(self):
+        return str(self.partType) + str(self.partId)
 
     def deletePart(self):   # NEEDS TO BE COMPLETED!! (find index of part, remove part from parts_name_list, etc)
         Part.number_of_parts -= 1
@@ -94,14 +95,19 @@ def index():
         form_node2 = request.form['pnode2']
         # NEED TO CHECK IF PART NAME IS USED ALREADY --> IF NOT, DO NOT ADD!!
         part_array.append(Part(form_type, form_ident, form_value, form_node1, form_node2))  # Create the new part and append to the list
-        partAdded = True
+        part_array.sort(key=attrgetter('partType','partId'))    # Keep the parts list sorted
+        partAdded = True    # Part successfully added to the net list
 
     # # # REMOVE THIS LATER # # #
     print(Part.number_of_parts) # Prints the number of parts to the console (not to the HTML page)
     print(partAdded)
+
+    for part in part_array:
+        print(part.getPartName())
+    
     # # # # # # # # # # # # # # #
 
-    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim, partAddedH = partAdded)    # NEED TO INCLUDE VARS HERE (I think)
+    return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim, partAddedH = partAdded)
 
 
 
@@ -125,7 +131,7 @@ def clearList():
     return redirect('/')
 
 
-@app.route('/undo')
+@app.route('/undo') # BROKEN CURRENTLY -- REMOVES THE WRONG COMPONENT !!!!!!!!!!!!!!!!!!!
 def undoAdd():
     Part.part_names_list.pop()
     part_array.pop()
@@ -146,6 +152,7 @@ def instructions():
 
 
 if __name__ == "__main__":
-    part_array = []         # Establish the list holding the parts
-    sim = Simulation("0",0,0,0)
+    part_array = []             # Establish the list holding the parts
+    part_names_list = []        # Keeps track of all the part names
+    sim = Simulation("0",0,0,0) # Keeps track of the simulation settings
     app.run(debug=True)
