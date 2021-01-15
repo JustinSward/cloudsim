@@ -2,25 +2,26 @@ from flask import Flask, render_template, url_for, request, redirect
 from datetime import datetime
 from operator import itemgetter, attrgetter
 
-app = Flask(__name__)
+# PROGRAMMED BY JUSTIN SWARD
 
+app = Flask(__name__)       # Use the flask Python web framework
 
 # Definition of the Part class
-# @param partType The type of part (0=VDC, 1=VAC, 2=Resistor, 3=Capacitor,4=Inductor)
-# @param partId The instance of the part within that type
-# @param partValue The absolute value in base units (Ohms, Farads, Henries) of the part
-# @param node1 The numerical value of the positive or first node the part is connected
-# @param node2 The numerical value of the negative or second node the part is connected
+# @param input partType The type of part (0=VDC, 1=VAC, 2=Resistor, 3=Capacitor,4=Inductor)
+# @param input partId The instance of the part within that type
+# @param input partValue The absolute value in base units (Ohms, Farads, Henries) of the part
+# @param input node1 The numerical value of the positive or first node the part is connected
+# @param input node2 The numerical value of the negative or second node the part is connected
 class Part:
     number_of_parts = 0 # Keeps track of the number of parts
 
     def __init__(self, partType, partId,partValue, node1, node2):
-        self.partType = partType
-        self.partId = partId    #TYPE CAST TO int() if needed!
-        self.partValue = partValue
-        self.node1 = node1
-        self.node2 = node2
-        Part.number_of_parts += 1
+        self.partType = partType        # Component type (V,R,C,L,...)
+        self.partId = partId            # Component numeric identifier
+        self.partValue = partValue      # Component value (numeric)
+        self.node1 = node1              # Component first node (+ve if applicable)
+        self.node2 = node2              # Component second node (-ve if applicable)
+        Part.number_of_parts += 1       # Increment the number of parts in the Part class
 
     def getType(self):
         return self.partType
@@ -37,31 +38,30 @@ class Part:
     def getNode2(self):
         return self.node2
 
+    # Returns a string value for the units based on the part type
     def getUnits(self):
         if self.partType == "V":
-            return "Volts"
+            return "V"
         elif self.partType == "R":
-            return "Ohms"
+            return "\u03A9"
         elif self.partType == "C":
-            return "Farads"
+            return "F"
         elif self.partType == "L":
-            return "Henry"
+            return "H"
     
+    # Returns the full part name based on the part type and ID
     def getPartName(self):
         return str(self.partType) + str(self.partId)
-
-    def deletePart(self):   # NEEDS TO BE COMPLETED!! (find index of part, remove part from parts_name_list, etc)
-        Part.number_of_parts -= 1
-        return True
 
 
 class Simulation:
     def __init__(self, simtype, simnode, simstartfreq, simendfreq):
-        self.simtype = simtype
-        self.simnode = simnode
-        self.simstartfreq = simstartfreq
-        self.simendfreq = simendfreq
+        self.simtype = simtype              # Simulation Type
+        self.simnode = simnode              # Simulation Node
+        self.simstartfreq = simstartfreq    # Simulation Start (low) frequency
+        self.simendfreq = simendfreq        # Simulation End (high) frequency
 
+    # Return string description of the simulation type being run
     def getType(self):
         if self.simtype == "1":
             return "Voltage Reading"
@@ -72,18 +72,21 @@ class Simulation:
         else:
             return "Something went wrong!"
 
+    # Return string of the node to be simulated
     def getNode(self):
         return str(self.simnode)
     
+    # Return string of the simulation start frequency
     def getStart(self):
         return str(self.simstartfreq)
     
+    # Return string of the simulation end frequency
     def getEnd(self):
         return str(self.simendfreq)
 
 
 
-
+# Render main simulator page; Add component to the netlist if one was added
 @app.route('/', methods=['POST', 'GET'])
 def index():
     partAdded = False
@@ -95,7 +98,7 @@ def index():
         form_node1 = request.form['pnode1']
         form_node2 = request.form['pnode2']
         form_name = str(form_type) + str(form_ident)
-        # NEED TO CHECK IF PART NAME IS USED ALREADY --> IF IT IS, DO NOT ADD
+        # Check if part name is already in use -- only add if it is unused
         if any(part.getPartName() == form_name for part in part_array):
             partAdded = False   # Part was NOT added to the net list
             partFailed = True   # Part did failed being added to the net list
@@ -105,12 +108,11 @@ def index():
             partAdded = True    # Part successfully added to the net list
             partFailed = False  # Part did not fail being added to the net list
 
-
     return render_template('index.html', PartHTML = Part, part_arrayHTML = part_array, simHTML = sim, partAddedH = partAdded, partFailedH = partFailed)
 
 
 
-
+# Run simulation using the simulation parameters given
 @app.route('/run', methods=['POST', 'GET'])
 def run():
     if request.method == 'POST':
@@ -122,6 +124,7 @@ def run():
 
 
 
+# Delete all parts in the net list (clear netlist)
 @app.route('/clear')
 def clearList():
     part_array.clear()
@@ -129,19 +132,21 @@ def clearList():
     return redirect('/')
 
 
-@app.route('/delete/<qwerty>')
-def deletePart(qwerty):
+# Delete requested from main page to delete part in net list
+@app.route('/delete/<toDelete>')
+def deletePart(toDelete):
     for part in part_array:
-        if part.getPartName() == qwerty:
+        if part.getPartName() == toDelete:
             index = part_array.index(part)
             print("Index is: " + str(index))
             part_array.pop(index)
+            Part.number_of_parts -= 1
             break
     return redirect('/')
 
 
 
-@app.route('/undo') # BROKEN CURRENTLY -- REMOVES THE WRONG COMPONENT !!!!!!!!!!!!!!!!!!!
+@app.route('/undo') # BROKEN CURRENTLY -- REMOVES THE WRONG COMPONENT !!!
 def undoAdd():
     part_array.pop()
     Part.number_of_parts -= 1
@@ -149,18 +154,20 @@ def undoAdd():
 
 
 
+# Renders the AboutUs web page
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 
+# Renders the Instructions web page
 @app.route('/instructions')
 def instructions():
     return render_template('instructions.html')
 
 
-
+# Run the main program
 if __name__ == "__main__":
-    part_array = []             # Establish the list holding the parts
-    sim = Simulation("0",0,0,0) # Keeps track of the simulation settings
-    app.run(debug=True)
+    part_array = []             # Establish the netlist holding the parts and their information (Parts objects)
+    sim = Simulation("0",0,0,0) # Keeps track of the simulation settings - establish defaults
+    app.run(debug=True) # Add Port 8080 to run virtualenv on the Google Cloud App platform

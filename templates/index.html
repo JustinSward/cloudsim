@@ -20,10 +20,10 @@
             <option value="C">Capacitor (C)</option>
             <option value="L">Inductor (L)</option>
         </select>
-        <input type="text" name="pident" id="pident" placeholder="Identifier" required>
-        <input type="number" name="pvalue" id="pvalue" placeholder="Value" min="0" step="any" required>
-        <input type="number" name="pnode1" id="pnode1" placeholder="Node 1" min="0" step="1" required>
-        <input type="number" name="pnode2" id="pnode2" placeholder="Node 2" min="0" step="1" required>
+        <input type="text" name="pident" id="pident" placeholder="Identifier" style="width:7em" required>
+        <input type="number" name="pvalue" id="pvalue" placeholder="Value [V,&#937;,F,H]" min="0" step="any" required>
+        <input type="number" name="pnode1" id="pnode1" placeholder="Node 1" min="0" step="1" style="width:7em" required>
+        <input type="number" name="pnode2" id="pnode2" placeholder="Node 2" min="0" step="1" style="width:7em" required>
         <input type="submit" value="Add Component">
     </form>
 
@@ -54,12 +54,12 @@
     <table>
         <thead>
             <tr>
-                <th>Component</th>
-                <th>Value</th>
-                <th>Units</th>
-                <th>Node 1</th>
-                <th>Node 2</th>
-                <th>Action</th>
+                <th style="width:6em">Component</th>
+                <th style="width:12em">Value</th>
+                <th style="width:4em">Units</th>
+                <th style="width:6em">Node 1</th>
+                <th style="width:6em">Node 2</th>
+                <th style="width:6em">Action</th>
             </tr>
             {% for Part in part_arrayHTML %} <!-- Make a new row for each part in the netlist -->
             <tr>
@@ -85,7 +85,7 @@
             <option value="2">Time Analysis</option>
             <option value="3">Frequency Analysis</option>
         </select>
-        <input type="number" name="simnode" id="simnode" placeholder="Node" min="0" step="1" required>
+        <input type="number" name="simnode" id="simnode" placeholder="Node" min="0" step="1" style="width:8em" required>
         <input type="text" name="simstartfreq" id="simstartfreq" placeholder="Start Frequency [Hz]">
         <input type="text" name="simendfreq" id="simendfreq" placeholder="End Frequency [Hz]">
         <input type="submit" value="Run Simulation">

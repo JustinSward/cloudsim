@@ -30,14 +30,13 @@ body {
 }
 
 .content {
-	width: 75%;
+	width: 80%;
 	margin: auto;
 	text-align: center;
 }
 
 table {
 	border-collapse: collapse;
-	width: 50%;
 	margin: auto;
 	text-align: center;
 }
@@ -45,6 +44,10 @@ table {
 td, th {
 	border: 1px solid grey;
 	background-color:rgb(233, 233, 233)
+}
+
+.aboutustable {
+	width: 100%;
 }
 
 a{
