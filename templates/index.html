@@ -6,13 +6,35 @@
 {% block body %}
 <div class="topnav">
     <a class="active" href="/">Simulator</a>
+    <a href="/run">Results</a>
     <a href="/instructions">Instructions</a>
     <a href="/about">About Us</a>
   </div>
 
-<h2>Simulation Setup</h2>
+<h2>Netlist Setup</h2>
 
 <div class="content">
+
+    <table>
+        <tr>
+            <td>
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="submit" value="Import Netlist"/>
+                <input type="file" name="import" />
+            </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form action="/download" method="POST">
+                <input type="submit" value="Export Netlist" /></form>
+            </td>
+        </tr>
+    </table>
+    
+
+    <br>
+
     <form action="/" method="POST">
         <select name="ptype" id="ptype">
             <option value="V">Voltage Source (V)</option>
@@ -22,8 +44,8 @@
         </select>
         <input type="text" name="pident" id="pident" placeholder="Identifier" style="width:7em" required>
         <input type="number" name="pvalue" id="pvalue" placeholder="Value [V,&#937;,F,H]" min="0" step="any" required>
-        <input type="number" name="pnode1" id="pnode1" placeholder="Node 1" min="0" step="1" style="width:7em" required>
-        <input type="number" name="pnode2" id="pnode2" placeholder="Node 2" min="0" step="1" style="width:7em" required>
+        <input type="number" name="pnode1" id="pnode1" placeholder="Node 1 (+)" min="0" step="1" style="width:7em" required>
+        <input type="number" name="pnode2" id="pnode2" placeholder="Node 2 (-)" min="0" step="1" style="width:7em" required>
         <input type="submit" value="Add Component">
     </form>
 
@@ -38,14 +60,14 @@
 
 
     {% if PartHTML.number_of_parts < 1 %}
-    <p style="color:darkred" style="margin:0.5em">The netlist is currently empty.</p>
+    <p style="color:darkred" style="margin:0.5em">The netlist is currently empty. Please start by adding a component or importing a netlist file.<br><br> If this is your first visit, please see the <a href="/instructions">Instructions</a> for guidance.</p>
     <br>
     {% else %}
     <p style="color:darkblue" style="padding:1em">
         {% if PartHTML.number_of_parts == 1 %}
-        Total: {{ PartHTML.number_of_parts }} Net
+        Total: {{ PartHTML.number_of_parts }} Component
         {% else %}
-            Total: {{ PartHTML.number_of_parts }} Nets
+            Total: {{ PartHTML.number_of_parts }} Components
     {% endif %}
     </p>
     ( <a href='/clear'>CLEAR NETLIST</a> )
@@ -78,7 +100,10 @@
     </table>
 
     
-    <br><hr width=75%><br>
+    <br><hr width=75%>
+
+    <h2>Simulation Parameters</h2>
+
     <form action="/run" method="POST">
         <select name="simtype" id="simtype">
             <option value="1">Voltage Analysis</option>

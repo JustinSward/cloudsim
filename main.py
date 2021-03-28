@@ -1,10 +1,16 @@
-from flask import Flask, render_template, url_for, request, redirect
+import os
+from flask import Flask, flash, render_template, url_for, request, redirect, Response, send_file
 from datetime import datetime
 from operator import itemgetter, attrgetter
+from werkzeug.utils import secure_filename
 
 # PROGRAMMED BY JUSTIN SWARD
 
+UPLOAD_FOLDER = '/files'
+ALLOWED_EXTENSIONS = {'net', 'txt'}
+
 app = Flask(__name__)       # Use the flask Python web framework
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Definition of the Part class
 # @param input partType The type of part (0=VDC, 1=VAC, 2=Resistor, 3=Capacitor,4=Inductor)
@@ -122,6 +128,29 @@ def run():
         sim.simendfreq = request.form['simendfreq']
     return render_template('run.html', simHTML = sim)
 
+
+###########     ###########         ######################          ######################      ###########    
+###########     ###########         ######################          ######################      ###########
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files["import"]
+        filename = secure_filename(file.filename)
+        file.save("./files/upload.net")
+    return redirect('/')
+
+
+###########     ###########         ######################          ######################      ###########    
+
+
+@app.route('/download', methods=['GET', 'POST'])
+def download_file():
+
+    return send_file('files/download.net', attachment_filename='download.net')
+
+
+###########     ###########         ######################          ######################      ###########    
+###########     ###########         ######################          ######################      ###########    
 
 
 # Delete all parts in the net list (clear netlist)

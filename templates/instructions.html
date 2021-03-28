@@ -6,12 +6,54 @@
 {% block body %}
 <div class="topnav">
     <a href="/">Simulator</a>
+    <a href="/run">Results</a>
     <a class="active" href="/instructions">Instructions</a>
     <a href="/about">About Us</a>
 </div>
 
 <h2>How to Use CircuitSimulatorApp</h2>
 
-<h3>UNDER CONSTRUCTION</h3>
+<div class="instructionsdiv">
+
+<p style="margin:1em">CircuitSimulator App can simulate electronic circuits given a netlist. A netlist is a description of the parts in the circuit and their interconnections.</p>
+
+<h3>Importing a Netlist</h3>
+
+<p style="margin:1em">You can import a netlist from a .net file either previously exported from CircuitSimulator App or from other programs that use the ExpressPCB netlist file format (used by popular software such as Analog Device's LTSpice).</p>
+
+<p style="margin:1em">Importing a netlist will clear the current netlist so be sure to save your state if you would like to be able to return to it by exporting it first.</p>
+
+<h3>Building a Netlist</h3>
+
+<p style="margin:1em">The netlist can be built by adding components:</p>
+
+<ol>
+    <li>Select a component type from the drop-down menu (ie. Resistor)</li>
+    <li>Enter an identifier for this device (ie. "5", "source", etc)</li>
+    <li>Enter the numerical value in base units</li>
+    <li>Enter the first node connected to the device (positive, if polarity sensitive)</li>
+    <li>Enter the second node connected to the device (negative, if polarity sensitive)</li>
+    <li>Click the "Add Component" button to add the part to the netlist</li>
+</ol>
+
+<p style="margin:1em">Components in the list can be removed from the netlist by clicking the "Delete" link under the "Action" column for that part.</p>
+
+<p style="margin:1em">You can save your current netlist by using the "Export Netlist" button, which will provide a .net netlist file compatible with the ExpressPCB format. This can be imported back into CircuitSimulator App or into software such as LTSpice.</p>
+
+<h3>Setting up the Simulation</h3>
+
+
+<p style="margin:1em">The simulation parameters must be set prior to the simulation.</p>
+
+<ol>
+    <li>Select a simulation type from the drop-down menu:</li>
+    <li>Enter a numerical node value to simulate</li>
+    <li>Enter the starting (low) and end (high) frequencies, if performing a Frequency analysis</li>
+    <li>Click "Run Simulation" to run the simulation with the given settings.</li>
+</ol>
+
+<a href="/"><h2>GIVE IT A TRY!</h2></a>
+
+</div>
 
 {% endblock %}
